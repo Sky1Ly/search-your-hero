@@ -1,22 +1,32 @@
 $(document).ready(function () {
     let token = 4905856019427443
 
-    $("button").on("click", function () {
+    //El evento clic del botón debe ir async ya que al usar una función externa para el llamado de la API,
+    //Esta debe ser async y al llamarla igual debe ser async, por ende; el async del boton es necesario para
+    //que espere la respuesta de la API
+    $("button").on("click",async function () {
         let data = $("#inputSearch").val()
+
+        //Validación si el dato es un número
         if (isNaN(data)) {
             alert("El dato ingresado no es un número, intentelo nuevamente")
         } else {
+            //Validación de rango de número
             if (data < 1 || data > 731) {
                 alert("El número ingresado debe estar entre 1 y 731")
             } else {
                 event.preventDefault()
-                searchHero(token, data)
 
+                //arrayHero tiene el array de la respuesta de la API y debe de llamarse con await
+                let arrayHero = await searchHero(token, data)
+                console.log(arrayHero)
+
+                //Pinta en pantalla la card del hero (.append aggrega el elemento al final)
                 $("#contenido").html(`
                     <div class="card" style = "width: 18rem;" >
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="${arrayHero.image.url}" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
+                            <h3 class="card-title">${arrayHero.name}</h3>
                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
                         <ul class="list-group list-group-flush">
@@ -38,14 +48,19 @@ $(document).ready(function () {
 
 
 
-    function searchHero(token, id) {
-        $.ajax({
-            type: "GET",
-            url: `https://superheroapi.com/api.php/${token}/${id}`,
-            dataType: "json",
-            success: function (response) {
-                console.log(response)
-            }
-        });
+    async function searchHero(token, id) {
+        try {
+            response = await $.ajax({
+                type: "GET",
+                url: `https://superheroapi.com/api.php/${token}/${id}`,
+                dataType: "json"
+            });
+    
+            return response
+
+        } catch (error) {
+            throw error
+        }
+        
     }
 })
