@@ -1,6 +1,7 @@
 .contenedor-imagen {
   position: relative;
   overflow: hidden;
+  height: 500px;
 }
 
 .texto-superpuesto {
@@ -21,5 +22,11 @@ h1 {
 @media screen and (max-width: 767px) {
   h1 {
     font-size: 36px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .contenedor-imagen {
+    height: auto;
   }
 }
