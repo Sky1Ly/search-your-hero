@@ -81,6 +81,8 @@ $(document).ready(function () {
                 let chart = new CanvasJS.Chart("canvas", options);
                 chart.render();
 
+                dataPoints = []
+
                 $("#inputSearch").val("")
             }
         }
